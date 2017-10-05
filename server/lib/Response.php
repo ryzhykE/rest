@@ -59,18 +59,18 @@ class Response
     {
         switch ($type)
         {
-            case '.json':
-                $data = self::convertJSON($data);
-                break;
-            case '.xml':
-                $data = self::convertXML($data);
-                break;
-            case '.txt':
-                $data = self::convertTXT($data);
-                break;
-            case '.html':
-                $data = self::convertHTML($data);
-                break;
+        case '.json':
+            $data = self::convertJSON($data);
+            break;
+        case '.xml':
+            $data = self::convertXML($data);
+            break;
+        case '.txt':
+            $data = self::convertTXT($data);
+            break;
+        case '.html':
+            $data = self::convertHTML($data);
+            break;
         }
         return $data;
     }
@@ -81,10 +81,11 @@ class Response
         return json_encode($data);
     }
     private function  convertXML($data) {
-        header("Content-Type: application/xml");
-        //$xml = new SimpleXMLElement("<" . get_class( $this ) . "/>");
-        //array_walk_recursive( $this->model->data, array ($xml, 'addChild') );
-        //return $xml->asXML();
+        header("Content-Type: text/xml");
+        $xml = new SimpleXMLElement('<root/>');
+        $data = array_flip($data);
+        array_walk_recursive($data, array ($xml, 'addChild'));
+        return $xml->asXML(); 
     }
     private function convertTXT($data)
     {
@@ -94,7 +95,23 @@ class Response
     private function convertHTML($data)
     {
         header('Content-Type: text/html; charset=utf-8');
-        print_r($data);
+        if(is_array($data))
+        {
+            print_r('<head>');
+            print_r('</head>');
+            print_r('<body>');
+            print_r('<pre>');
+            foreach($data as $key => $value)
+            {
+                print_r($key . ':' . $value . '<br>');
+            } 
+            print_r('</pre>');
+
+            return;
+        }
+        $data = '<pre>' .  $data . '</pre>';
+        print_r($data);  
+        print_r('</body>');
     }
 
 }

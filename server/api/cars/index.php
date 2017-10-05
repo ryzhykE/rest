@@ -1,5 +1,6 @@
 <?php
 include '../../lib/RestServer.php';
+include '../../lib/Response.php';
 class Cars extends RestServer
 {
     public function __construct()
@@ -7,11 +8,22 @@ class Cars extends RestServer
         $this->run();
     }
 
-    public function getCars($data = false)
-    {
+    
+
+    public function getCars($data = false, $params = false)
+    {  
+       
+        $array = array(
+                "marka" => "x5",
+                "car" => "bmw",
+                "color" => "red"
+                );
+        //var_dump($data);
+        //var_dump($params);
+        $res = Response::typeDatat($array,'.xml');
         //TODO: if data=false get all cars
         //if isset id - get detail cars by id
-        return '<br>Hello! Params = 1';
+        print_r( $res);
 
     }
 

@@ -3,22 +3,20 @@ include_once ('config.php');
 class RestServer
 {
     protected $reqMethod;
+    public $params;
+
     public function run()
     {
         list($s, $user, $REST, $server, $api, $class, $data) = explode("/", $_SERVER['REQUEST_URI'], 7);
         $this->reqMethod = $_SERVER['REQUEST_METHOD'];
         $expansion = (preg_match('#(\.[a-z]+)#', $_SERVER['REQUEST_URI'], $match)) ;
-        var_dump($class);
-        //var_dump($expansion);
         if ($expansion[0] === 0)
         {
-            $params = trim($data, '/'.JSON_TYPE);
-            //var_dump($params);
+            $this->params = trim($data, '/'.JSON_TYPE);
         }
         else
         {
-            $params = trim($data, '/'.$expansion);
-           // var_dump($params);
+            $this->params = trim($data, '/'.$expansion);
         }
 
         switch ($this->reqMethod)
